@@ -232,6 +232,7 @@ private fun App() {
     val selectedTabIndex by remember { derivedStateOf { pagerState.currentPage } }
     val coroutineScope = rememberCoroutineScope()
 
+    val a = LocalContext.current as MainActivity
 
     Scaffold(
         topBar = {
