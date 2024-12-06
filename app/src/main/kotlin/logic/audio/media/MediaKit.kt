@@ -11,68 +11,53 @@ import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
 import android.provider.MediaStore
-import androidx.activity.result.launch
 import androidx.core.database.getStringOrNull
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import com.carlosdev.player.logic.audio.util.Prefs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.time.Instant
 import java.time.ZoneId
 
 class MediaKit : ViewModel() {
-    fun loadList(onListLoaded: () -> Unit) {
-        viewModelScope.launch {
-            // Carrega a lista aqui
-            onListLoaded()
-        }
-    }
-    //val mediaItemList: MutableStateFlow<MutableList<MediaItem>> = MutableLiveData(mutableListOf())
-    private val _mediaItems = MutableStateFlow<MutableList<MediaItem>>(mutableListOf())
-    val mediaItemList: StateFlow<MutableList<MediaItem>> = _mediaItems.asStateFlow()
-
-    val albumItemList: MutableLiveData<MutableList<Utils.Album>> =
-        MutableLiveData(mutableListOf())
-    val albumArtistItemList: MutableLiveData<MutableList<Utils.Artist>> =
-        MutableLiveData(
+    val mediaItemList: MutableStateFlow<MutableList<MediaItem>> = MutableStateFlow(mutableListOf())
+    val albumItemList: MutableStateFlow<MutableList<Utils.Album>> =
+        MutableStateFlow(mutableListOf())
+    val albumArtistItemList: MutableStateFlow<MutableList<Utils.Artist>> =
+        MutableStateFlow(
             mutableListOf(),
         )
-    val artistItemList: MutableLiveData<MutableList<Utils.Artist>> =
-        MutableLiveData(
+    val artistItemList: MutableStateFlow<MutableList<Utils.Artist>> =
+        MutableStateFlow(
             mutableListOf(),
         )
-    val genreItemList: MutableLiveData<MutableList<Utils.Genre>> =
-        MutableLiveData(
+    val genreItemList: MutableStateFlow<MutableList<Utils.Genre>> =
+        MutableStateFlow(
             mutableListOf(),
         )
-    val dateItemList: MutableLiveData<MutableList<Utils.Date>> =
-        MutableLiveData(
+    val dateItemList: MutableStateFlow<MutableList<Utils.Date>> =
+        MutableStateFlow(
             mutableListOf(),
         )
-    val playlistList: MutableLiveData<MutableList<Utils.Playlist>> =
-        MutableLiveData(
+    val playlistList: MutableStateFlow<MutableList<Utils.Playlist>> =
+        MutableStateFlow(
             mutableListOf(),
         )
-    val folderStructure: MutableLiveData<Utils.FileNode> =
-        MutableLiveData(
+    val folderStructure: MutableStateFlow<Utils.FileNode> =
+        MutableStateFlow(
             Utils.FileNode("storage", mutableListOf(), mutableListOf())
         )
-    val shallowFolderStructure: MutableLiveData<Utils.FileNode> =
-        MutableLiveData(
+    val shallowFolderStructure: MutableStateFlow<Utils.FileNode> =
+        MutableStateFlow(
             Utils.FileNode("shallowFolder", mutableListOf(), mutableListOf())
         )
 
-    val artistMusicItemList: MutableLiveData<MutableList<MediaItem>> =
-        MutableLiveData(
+    val artistMusicItemList: MutableStateFlow<MutableList<MediaItem>> =
+        MutableStateFlow(
             mutableListOf(),
         )
 }
@@ -620,7 +605,7 @@ object Utils {
     suspend fun updateLibraryWithInCoroutine(libraryViewModel: MediaKit, context: Context) {
         val pairObject = getAllSongs(context)
         withContext(Dispatchers.Main) {
-            libraryViewModel.mediaItemList.value.addAll(pairObject.songList)
+            libraryViewModel.mediaItemList.value = pairObject.songList
             libraryViewModel.albumItemList.value = pairObject.albumList
             libraryViewModel.artistItemList.value = pairObject.artistList
             libraryViewModel.albumArtistItemList.value = pairObject.albumArtistList
@@ -631,5 +616,4 @@ object Utils {
             libraryViewModel.shallowFolderStructure.value = pairObject.shallowFolder
         }
     }
-
 }

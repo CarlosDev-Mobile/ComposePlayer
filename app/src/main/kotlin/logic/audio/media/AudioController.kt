@@ -5,8 +5,15 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 
 class AudioController (private val player: Player) {
+    private var currentMediaItems: MutableList<MediaItem>? = null
+
+    fun player() = player
+
+    fun mediaItems() = currentMediaItems
+
     fun setMediaItem(list: MutableList<MediaItem>, position: Int, startPosition: Long) {
         run {
+            currentMediaItems = list
             player.setMediaItems(list, position, startPosition)
             player.prepare()
             player.playWhenReady = false
@@ -15,6 +22,7 @@ class AudioController (private val player: Player) {
 
     fun setMediaItem(list: MutableList<MediaItem>) {
         run {
+            currentMediaItems = list
             player.setMediaItems(list)
             player.prepare()
             player.playWhenReady = false

@@ -1,5 +1,7 @@
 package com.carlosdev.player.ui.icons
 
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -7,6 +9,7 @@ import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 
 val AlbumVector: ImageVector
+    @Composable
     get() {
         if (_Album != null) {
             return _Album!!
@@ -18,7 +21,7 @@ val AlbumVector: ImageVector
             viewportWidth = 960f,
             viewportHeight = 960f
         ).apply {
-            path(fill = SolidColor(Color(0xFF000000))) {
+            path(fill = SolidColor(MaterialTheme.colorScheme.primary)) {
                 moveTo(480f, 660f)
                 quadTo(555f, 660f, 607.5f, 607.5f)
                 quadTo(660f, 555f, 660f, 480f)
